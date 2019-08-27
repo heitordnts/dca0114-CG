@@ -13,8 +13,9 @@ void display(void)
 	glColor3f (1.0, 1.0, 1.0);
 	glLoadIdentity ();             /* clear the matrix */
 	/* viewing transformation  */
-	gluLookAt (0.0, 2.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
-	glScalef (1.0, 2.0, 1.0);      /* modeling transformation */ 
+	gluLookAt (1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+	//glTranslatef(0.0,0.0,-5.0);
+	glScalef (1.0, 1.0, 1.0);      /* modeling transformation */ 
 	glutWireCube (1.0);
 	glFlush ();
 }
@@ -24,7 +25,8 @@ void reshape (int w, int h)
 	glViewport (0, 0, (GLsizei) w, (GLsizei) h); 
 	glMatrixMode (GL_PROJECTION);
 	glLoadIdentity ();
-	glFrustum (-1.0, 1.0, -1.0, 1.0, 1.5, 20.0);
+	//glFrustum (-1.0, 1.0, -1.0, 1.0, 1.5, 20.0);
+	gluPerspective(90.0,1.0,-1,1);
 	glMatrixMode (GL_MODELVIEW);
 }
 

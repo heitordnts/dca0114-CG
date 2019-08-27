@@ -3,7 +3,7 @@
 #include <GL/glut.h>
 #include <stdlib.h>
 
-static GLfloat spin = 0.0,inc = 2.0;
+static GLfloat spin = 0.0,inc = 20.0;
 
 void init(void) 
 {
@@ -45,7 +45,7 @@ void mouse(int button, int state, int x, int y)
    switch (button) {
       case GLUT_LEFT_BUTTON:
          if (state == GLUT_DOWN)
-			inc = 2.0;			
+			inc = 2000.0;			
             glutIdleFunc(spinDisplay);
          break;
       case GLUT_MIDDLE_BUTTON:
@@ -54,7 +54,7 @@ void mouse(int button, int state, int x, int y)
          break;
       case GLUT_RIGHT_BUTTON:
          if (state == GLUT_DOWN)
-			inc = -2.0;			
+			inc = -2000.0;			
             glutIdleFunc(spinDisplay);
          break;
       default:
