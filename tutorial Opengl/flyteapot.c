@@ -4,8 +4,30 @@
 double xd, yd, zd;           // current teapot position (initialized in main)
 double ex, ey, ez;           // current teapot position (initialized in main)
 
-double INC = 0.1;
+double INC = 0.2;
 double ANG = 1,ANGZ=1;
+
+
+void init(void) 
+{
+   GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+   GLfloat mat_shininess[] = { 50.0 };
+   GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
+   glClearColor (0.0, 0.0, 0.0, 0.0);
+   glShadeModel (GL_SMOOTH);
+
+   glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+   glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+   glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+
+   glEnable(GL_LIGHTING);
+   glEnable(GL_LIGHT0);
+   glEnable(GL_DEPTH_TEST);
+}
+
+
+
+
 void display () {
 
     /* clear window */
@@ -18,43 +40,48 @@ void display () {
     //gluLookAt(0.0,0.0,0.0,ex,ey,ez,0.0,1.0,0.0);
     //gluLookAt(0.0,0.0,0.0,0.0,0.0,0.0,ex,ey,ez);
 
-	glColor3f (1.0, 1.0, 1.0);
+	glColor3f (0.0, 0.0, 1.0);
 	
     glPushMatrix();
 
+    /* draw scene */
 	glRotatef(ex,0.0,1.0,0.0);
 	glRotatef(ez,1.0,0.0,0.0);
 	glTranslatef(xd,yd,zd);
-    /* draw scene */
+
     glPushMatrix();
-		glTranslatef(0,-1,0);
+		glTranslatef(0,-0.05,0);
 		glScalef(1,0.01,1);
-		glutWireCube(5.0);
+		glutSolidCube(5.0);
     glPopMatrix();
+
+	glColor3f(0,1,0);
 
     glPushMatrix();
 		glTranslatef(0.5,0,0);
 		glScalef(1,0.05,0.05);
-		glutWireCube(1.0);
+		glutSolidCube(1.0);
+		//glutWireCube(1.0);
     glPopMatrix();
 
     glPushMatrix();
 		glTranslatef(0,0.5,0);
 		glScalef(0.05,1,0.05);
-		glutWireCube(1.0);
+		glutSolidCube(1.0);
     glPopMatrix();
 
     glPushMatrix();
 		glTranslatef(0,0,0.5);
 		glScalef(0.05,0.05,1);
-		glutWireCube(1.0);
+		glutSolidCube(1.0);
     glPopMatrix();
-
+/*
 	glColor3f (1.0, 0.0, 1.0);
     glPushMatrix();
 		//glRotatef(ex,0.0,1.0,0.0);
 		glutSolidTeapot(.5);
     glPopMatrix();
+*/
 
     glPopMatrix();
     /* flush drawing routines to the window */
@@ -138,6 +165,7 @@ int main ( int argc, char * argv[] ) {
 
     /* create and set up a window */
     glutCreateWindow("flying teapot");
+	init();
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
 	glutKeyboardFunc(keyboard);
@@ -152,7 +180,7 @@ int main ( int argc, char * argv[] ) {
     glLoadIdentity();
 	//glOrtho(-2.0,2.0,-2.0,2.0,-2.0,2.0);
     //glFrustum(-1.0,1.0,-1.0,1.0,.5,3.0);
-    gluPerspective(70.0,1.0,0.5,300.0);
+    gluPerspective(45.0,1.0,0.5,300.0);
 
     /* define the viewing transformation */
     glMatrixMode(GL_MODELVIEW);
