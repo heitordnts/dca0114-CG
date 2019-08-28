@@ -4,6 +4,8 @@
 double xd, yd, zd;           // current teapot position (initialized in main)
 double ex, ey, ez;           // current teapot position (initialized in main)
 
+double INC = 0.1;
+double ANG = 1,ANGZ=1;
 void display () {
 
     /* clear window */
@@ -16,14 +18,48 @@ void display () {
     //gluLookAt(0.0,0.0,0.0,ex,ey,ez,0.0,1.0,0.0);
     //gluLookAt(0.0,0.0,0.0,0.0,0.0,0.0,ex,ey,ez);
 
+	glColor3f (1.0, 1.0, 1.0);
+	
+    glPushMatrix();
+
+	glRotatef(ex,0.0,1.0,0.0);
+	glRotatef(ez,1.0,0.0,0.0);
+	glTranslatef(xd,yd,zd);
     /* draw scene */
     glPushMatrix();
-    glTranslatef(xd,yd,zd);
-    glutWireTeapot(.5);
+		glTranslatef(0,-1,0);
+		glScalef(1,0.01,1);
+		glutWireCube(5.0);
     glPopMatrix();
 
+    glPushMatrix();
+		glTranslatef(0.5,0,0);
+		glScalef(1,0.05,0.05);
+		glutWireCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+		glTranslatef(0,0.5,0);
+		glScalef(0.05,1,0.05);
+		glutWireCube(1.0);
+    glPopMatrix();
+
+    glPushMatrix();
+		glTranslatef(0,0,0.5);
+		glScalef(0.05,0.05,1);
+		glutWireCube(1.0);
+    glPopMatrix();
+
+	glColor3f (1.0, 0.0, 1.0);
+    glPushMatrix();
+		//glRotatef(ex,0.0,1.0,0.0);
+		glutSolidTeapot(.5);
+    glPopMatrix();
+
+    glPopMatrix();
     /* flush drawing routines to the window */
     glFlush();
+	glutSwapBuffers();
 }
 
 void animate () {
@@ -47,45 +83,45 @@ void keyboard (unsigned char key, int x, int y)
 {
 	switch (key) {
 		case 'w':
-			xd+=0.1;
-			break;
-		case 'd':
-			zd += .1;
+			zd+=INC;
 			break;
 		case 's':
-			xd-=0.1;
+			zd-=INC;
 			break;
 		case 'a':
-			zd -= .1;
+			xd +=INC;
+			break;
+		case 'd':
+			xd -=INC;
 			break;
 		case 'q':
-			yd-=0.1;
+			yd-=INC;
 			break;
 		case 'e':
-			yd += .1;
+			yd +=INC;
 			break;
-		case 'W':
-			ex+=0.1;
+		case 'j':
+			ex+=ANG;
 			break;
-		case 'D':
-			ez += .1;
+		case 'l':
+			ex-= ANG;
 			break;
-		case 'S':
-			ex-=0.1;
+
+		case 'k':
+			ez +=ANGZ;
 			break;
-		case 'A':
-			ez -= .1;
+		case 'i':
+			ez -=ANGZ;
 			break;
 		case 'Q':
-			ey-=0.1;
+			ey-=INC;
 			break;
 		case 'E':
-			ey += .1;
+			ey += INC;
 			break;
 		default:
 			break;
 	}
-	printf("%lf\n",xd);
 	glutPostRedisplay();
 }
 
@@ -98,7 +134,7 @@ int main ( int argc, char * argv[] ) {
     /* setup the size, position, and display mode for new windows */
     glutInitWindowSize(500,500);
     glutInitWindowPosition(0,0);
-    glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH);
+    glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
 
     /* create and set up a window */
     glutCreateWindow("flying teapot");
@@ -121,7 +157,7 @@ int main ( int argc, char * argv[] ) {
     /* define the viewing transformation */
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(1.0,0.0,0.0,
+    gluLookAt(0.0,0.0,3.0,
 				0.0,0.0,0.0,
 				0.0,1.0,0.0);
 
