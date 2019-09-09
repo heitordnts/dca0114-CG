@@ -1,5 +1,11 @@
 NAME=robot
 CFLAGS= -lm -lGL -lGLU -lglut
 
-all:
-	gcc $(NAME).c -o $(NAME) $(CFLAGS)
+#all:
+#	gcc $(NAME).c -o $(NAME) $(CFLAGS)
+
+%.c:
+	echo $<
+	echo $%
+	echo $%
+	

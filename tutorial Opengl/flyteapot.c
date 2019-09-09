@@ -1,5 +1,6 @@
 #include <GL/gl.h>
 #include <GL/glut.h>
+#include <math.h>
 
 double xd, yd, zd;           // current teapot position (initialized in main)
 double ex, ey, ez;           // current teapot position (initialized in main)
@@ -7,6 +8,36 @@ double ex, ey, ez;           // current teapot position (initialized in main)
 double INC = 0.2;
 double ANG = 1,ANGZ=1;
 
+double ix,iy,iz;
+
+void dir(){
+	double mod = sqrt(xd*xd + yd*yd + zd*zd);
+	if (mod == 0) return;
+
+	ix = -xd/mod;
+	iy = -yd/mod;
+	iz = -zd/mod;
+
+	printf("ix=%lf\niy=%lf\niz=%lf\nmod=%lf\n", ix,iy,iz,mod);
+
+}
+
+
+void flat_plane(){
+	glBegin(GL_LINES);
+	for(int i=-10;i<= 10;i++){
+	glVertex3d(i,0,-10);
+	glVertex3d(i,0.0,10.0);
+	}
+	glEnd();	
+
+	glBegin(GL_LINES);
+	for(int i=-10;i<= 10;i++){
+	glVertex3d(-10,0,i);
+	glVertex3d(10,0.0,i);
+	}
+	glEnd();	
+}
 
 void init(void) 
 {
@@ -25,9 +56,6 @@ void init(void)
    glEnable(GL_DEPTH_TEST);
 }
 
-
-
-
 void display () {
 
     /* clear window */
@@ -39,21 +67,28 @@ void display () {
     //gluLookAt(ex,ey,ez,0.0,0.0,0.0,0.0,1.0,0.0);
     //gluLookAt(0.0,0.0,0.0,ex,ey,ez,0.0,1.0,0.0);
     //gluLookAt(0.0,0.0,0.0,0.0,0.0,0.0,ex,ey,ez);
-
 	glColor3f (0.0, 0.0, 1.0);
 	
+
     glPushMatrix();
 
     /* draw scene */
-	glRotatef(ex,0.0,1.0,0.0);
-	glRotatef(ez,1.0,0.0,0.0);
-	glTranslatef(xd,yd,zd);
+	//glRotatef(ex,0.0,1.0,0.0);
+	//glRotatef(ez,1.0,0.0,0.0);
+	//glTranslatef(xd,yd,zd);
+    gluLookAt(xd,yd,zd
+				,0,0,0,
+				0,1,0);
+	//glTranslatef(0,0,0);
 
+	flat_plane();
+/*
     glPushMatrix();
 		glTranslatef(0,-0.05,0);
 		glScalef(1,0.01,1);
 		glutSolidCube(5.0);
     glPopMatrix();
+*/
 
 	glColor3f(0,1,0);
 
@@ -108,12 +143,17 @@ void reshape ( int width, int height ) {
 }
 void keyboard (unsigned char key, int x, int y)
 {
+	dir();
 	switch (key) {
 		case 'w':
-			zd+=INC;
+			zd+=iz;
+			yd+=iy;
+			xd+=ix;
 			break;
 		case 's':
-			zd-=INC;
+			zd-=iz;
+			yd-=iy;
+			xd-=ix;
 			break;
 		case 'a':
 			xd +=INC;
@@ -149,6 +189,7 @@ void keyboard (unsigned char key, int x, int y)
 		default:
 			break;
 	}
+	printf("%f\n", xd);
 	glutPostRedisplay();
 }
 
@@ -185,18 +226,22 @@ int main ( int argc, char * argv[] ) {
     /* define the viewing transformation */
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(0.0,0.0,3.0,
+    gluLookAt(0.0,0.0,10.0,
 				0.0,0.0,0.0,
 				0.0,1.0,0.0);
 
     /* initialize state variables (teapot position) */
     xd = 0;
     yd = 0;
-    zd = 0;
+    zd = 20;
 
     ex = 0;
     ey = 0;
     ez = 5;
+
+    ix = 0;
+    iy = 0;
+    iz = 5;
 
     /* tell GLUT to wait for events */
     glutMainLoop();
